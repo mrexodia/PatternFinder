@@ -1,6 +1,6 @@
 # PatternFinder
 
-Parallel signature matcher in C#.
+Parallel signature matcher/wildcard pattern finder in C#. Algorithm ported from [x64dbg](http://x64dbg.com).
 
 ## Examples
 
