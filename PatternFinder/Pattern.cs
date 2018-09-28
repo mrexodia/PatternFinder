@@ -115,7 +115,7 @@ namespace PatternFinder
             return true;
         }
 
-        public static bool Find(byte[] data, Byte[] pattern, out long offsetFound)
+        public static bool Find(byte[] data, Byte[] pattern, out long offsetFound, long offset = 0)
         {
             offsetFound = -1;
             if (data == null || pattern == null)
@@ -124,7 +124,7 @@ namespace PatternFinder
             if (data.LongLength == 0 || patternSize == 0)
                 return false;
 
-            for (long i = 0, pos = 0; i < data.LongLength; i++)
+            for (long i = offset, pos = 0; i < data.LongLength; i++)
             {
                 if (matchByte(data[i], ref pattern[pos])) //check if the current data byte matches the current pattern byte
                 {
@@ -143,6 +143,26 @@ namespace PatternFinder
             }
 
             return false;
+        }
+
+        public static bool FindAll(byte[] data, Byte[] pattern, out List<long> offsetsFound)
+        {
+            offsetsFound = new List<long>();
+            long size = data.Length, pos = 0;
+            while (size > pos)
+            {
+                if (Find(data, pattern, out long offsetFound, pos))
+                {
+                    offsetsFound.Add(offsetFound);
+                    pos = offsetFound + pattern.Length;
+                }
+                else
+                    break;
+            }
+            if (offsetsFound.Count > 0)
+                return true;
+            else
+                return false;
         }
 
         public static Signature[] Scan(byte[] data, Signature[] signatures)
